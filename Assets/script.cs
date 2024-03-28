@@ -13,6 +13,7 @@ public class script : MonoBehaviour {
     private int _moduleId = 0;
     private bool _isSolved = false, _lightsOn = false;
     private string internalSol = "";
+    const int solLength = 16;
 
     bool CheckAnswer(bool isZero = false)
     {
@@ -213,7 +214,7 @@ public class script : MonoBehaviour {
             }
             else
             {
-                if (internalSol[internalSol.Length - 1] != '+' && internalSol.Length < 20)
+                if (internalSol[internalSol.Length - 1] != '+' && internalSol.Length < solLength)
                 {
                     internalSol += '+';
                     UpdateScreen();
@@ -256,7 +257,7 @@ public class script : MonoBehaviour {
     }
     bool HandlePress2()
     {
-        if (_lightsOn && !_isSolved && internalSol.Length < 20)
+        if (_lightsOn && !_isSolved && internalSol.Length < solLength)
         {
             if (internalSol == "") internalSol += '2';
             else
@@ -277,7 +278,7 @@ public class script : MonoBehaviour {
     }
     bool HandlePress3()
     {
-        if (_lightsOn && !_isSolved && internalSol.Length < 20)
+        if (_lightsOn && !_isSolved && internalSol.Length < solLength)
         {
             if (internalSol == "") internalSol += '3';
             else
@@ -298,7 +299,7 @@ public class script : MonoBehaviour {
     }
     bool HandlePress4()
     {
-        if (_lightsOn && !_isSolved && internalSol.Length < 20)
+        if (_lightsOn && !_isSolved && internalSol.Length < solLength)
         {
             if (internalSol == "") internalSol += '4';
             else
