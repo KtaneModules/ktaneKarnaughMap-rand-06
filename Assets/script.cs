@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class script : MonoBehaviour {
@@ -379,4 +380,56 @@ public class script : MonoBehaviour {
     void Update () {
 		
 	}
+    
+#pragma warning disable 414
+    private readonly string TwitchHelpMessage = @"Send !{0} 1/2/3/4 to press numbered button. Send !{0} D to press D button. Send !{0} clear to clear input field. Send !{0} + to press S button. For example: !{0} 133+244+11223++";
+#pragma warning restore 414
+
+    IEnumerator ProcessTwitchCommand (string Command) {
+        if (Command.Length == 0)
+        {
+            yield return "sendtochaterror No arguments!";
+            yield break;
+        }
+
+        KMSelectable[] buttons = { button1, button2, button3, button4};
+
+        if (Command.ToLower().StartsWith("clear"))
+        {
+            foreach (var a in internalSol)
+            {
+                yield return new WaitForSeconds(0.075f);
+                buttonD.OnInteract();
+            }
+            yield break;
+        }
+ 
+        if (Regex.IsMatch(Command, @"^[1-4+Dd]+$"))
+        {
+            foreach (var part in Command)
+            {
+                yield return new WaitForSeconds(0.075f);
+                if (char.IsDigit(part))
+                {
+                    buttons[part - '0' - 1].OnInteract();
+                }
+                if (part == '+')
+                {
+                    buttonS.OnInteract();
+                }
+                if (part == 'D' || part == 'd')
+                {
+                    buttonD.OnInteract();
+                }
+            }
+            yield break;
+        }
+        yield return "sendtochaterror Command has wrong symbols!";
+    }
+
+    IEnumerator TwitchHandleForcedSolve() {
+        Module.HandlePass();
+        Debug.LogFormat("[Karnaugh Map #{0}] Force-solved.", _moduleId);
+        yield return null;
+    }
 }
